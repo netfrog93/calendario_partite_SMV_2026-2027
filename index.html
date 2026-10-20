@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendario SMV</title>
+<style>
+  :root {
+    --bg: #0b0f14;
+    --card: #121821;
+    --muted: #94a3b8;
+    --text: #e5e7eb;
+    --accent: #60a5fa;
+    --chip: #1f2937;
+    --chip-on: #2563eb;
+    --border: #1f2937;
+  }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji';
+  }
+  .container { max-width: 1300px; margin: 24px auto; padding: 0 16px; }
+  h1 { font-size: 28px; margin: 0 0 12px 0; }
+  .sub { color: var(--muted); margin-bottom: 20px; font-size: 14px; }
+  .filters { display: grid; gap: 16px; grid-template-columns: 1fr; margin-bottom: 16px; }
+  @media (min-width: 900px) { .filters { grid-template-columns: 1fr 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; }
+  .row { display: grid; gap: 10px; grid-template-columns: 140px 1fr; align-items: start; }
+  .row h3 { margin: 4px 0; font-size: 14px; color: var(--muted); font-weight: 600; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; background: var(--chip); border: 1px solid var(--border); padding: 6px 10px; border-radius: 999px; cursor: pointer; user-select: none; }
+  .chip input { display: none; }
+  .chip span { font-size: 13px; }
+  .chip:has(input:checked) { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; }
+  .search { display: flex; gap: 8px; align-items: center; }
+  .search input { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); background: #0f1520; color: var(--text); outline: none; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { text-align: left; position: sticky; top: 0; z-index: 2; background: #0f1520; border-bottom: 1px solid var(--border); padding: 10px; font-size: 13px; cursor: pointer; }
+  tbody td { border-bottom: 1px solid var(--border); padding: 10px; font-size: 14px; }
+  .bold { font-weight: 700; }
+  .count { color: var(--muted); font-size: 13px; margin: 8px 0 0 0; }
+  .table-card { margin-top: 16px; overflow: auto; border-radius: 16px; border: 1px solid var(--border); }
+  .sort-ind { color: var(--muted); font-size: 11px; margin-left: 6px; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calendario SMV</h1>
+    <div class="sub">Filtri multipli su Categoria, Coaches, Casa/Trasferta e Infrasettimanale/Weekend. Ricerca testuale globale.</div>
+
+    <div class="filters">
+      <div class="card">
+        <div class="row">
+          <h3>Categoria</h3>
+          <div class="chips">
+            <label class="chip" title="1DF">
+              <input type="checkbox" class="flt-categoria" id="categoria_0" value="1DF" >
+              <span>1DF</span>
+            </label>
+        
+
+            <label class="chip" title="3DF">
+              <input type="checkbox" class="flt-categoria" id="categoria_1" value="3DF" >
+              <span>3DF</span>
+            </label>
+        
+
+            <label class="chip" title="DF">
+              <input type="checkbox" class="flt-categoria" id="categoria_2" value="DF" >
+              <span>DF</span>
+            </label>
+        
+
+            <label class="chip" title="MISTO">
+              <input type="checkbox" class="flt-categoria" id="categoria_3" value="MISTO" >
+              <span>MISTO</span>
+            </label>
+        
+
+            <label class="chip" title="OPEN">
+              <input type="checkbox" class="flt-categoria" id="categoria_4" value="OPEN" >
+              <span>OPEN</span>
+            </label>
+        
+
+            <label class="chip" title="U12">
+              <input type="checkbox" class="flt-categoria" id="categoria_5" value="U12" >
+              <span>U12</span>
+            </label>
+        
+
+            <label class="chip" title="U13F">
+              <input type="checkbox" class="flt-categoria" id="categoria_6" value="U13F" >
+              <span>U13F</span>
+            </label>
+        
+
+            <label class="chip" title="U14F">
+              <input type="checkbox" class="flt-categoria" id="categoria_7" value="U14F" >
+              <span>U14F</span>
+            </label>
+        
+
+            <label class="chip" title="U15F">
+              <input type="checkbox" class="flt-categoria" id="categoria_8" value="U15F" >
+              <span>U15F</span>
+            </label>
+        
+
+            <label class="chip" title="U17F">
+              <input type="checkbox" class="flt-categoria" id="categoria_9" value="U17F" >
+              <span>U17F</span>
+            </label>
+        </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row">
+          <h3>Coaches</h3>
+          <div class="chips">
+            <label class="chip" title="Fabrizio">
+              <input type="checkbox" class="flt-coaches" id="coaches_0" value="Fabrizio" >
+              <span>Fabrizio</span>
+            </label>
+        
+
+            <label class="chip" title="Fabrizio e Giorgio">
+              <input type="checkbox" class="flt-coaches" id="coaches_1" value="Fabrizio e Giorgio" >
+              <span>Fabrizio e Giorgio</span>
+            </label>
+        
+
+            <label class="chip" title="Feffo">
+              <input type="checkbox" class="flt-coaches" id="coaches_2" value="Feffo" >
+              <span>Feffo</span>
+            </label>
+        
+
+            <label class="chip" title="Filippo">
+              <input type="checkbox" class="flt-coaches" id="coaches_3" value="Filippo" >
+              <span>Filippo</span>
+            </label>
+        
+
+            <label class="chip" title="Giorgio">
+              <input type="checkbox" class="flt-coaches" id="coaches_4" value="Giorgio" >
+              <span>Giorgio</span>
+            </label>
+        
+
+            <label class="chip" title="Luca">
+              <input type="checkbox" class="flt-coaches" id="coaches_5" value="Luca" >
+              <span>Luca</span>
+            </label>
+        
+
+            <label class="chip" title="Valeria">
+              <input type="checkbox" class="flt-coaches" id="coaches_6" value="Valeria" >
+              <span>Valeria</span>
+            </label>
+        
+
+            <label class="chip" title="Vera">
+              <input type="checkbox" class="flt-coaches" id="coaches_7" value="Vera" >
+              <span>Vera</span>
+            </label>
+        
+
+            <label class="chip" title="Vera e Fabrizio">
+              <input type="checkbox" class="flt-coaches" id="coaches_8" value="Vera e Fabrizio" >
+              <span>Vera e Fabrizio</span>
+            </label>
+        </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row">
+          <h3>Tipo partita</h3>
+          <div class="chips">
+            <label class="chip" title="Casa">
+              <input type="checkbox" class="flt-tipo" id="tipo_0" value="Casa" checked>
+              <span>Casa</span>
+            </label>
+        
+
+            <label class="chip" title="Trasferta">
+              <input type="checkbox" class="flt-tipo" id="tipo_1" value="Trasferta" checked>
+              <span>Trasferta</span>
+            </label>
+        </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row">
+          <h3>Giorno</h3>
+          <div class="chips">
+            <label class="chip" title="Infrasettimanale">
+              <input type="checkbox" class="flt-giorno" id="giorno_0" value="Infrasettimanale" checked>
+              <span>Infrasettimanale</span>
+            </label>
+        
+
+            <label class="chip" title="Weekend">
+              <input type="checkbox" class="flt-giorno" id="giorno_1" value="Weekend" checked>
+              <span>Weekend</span>
+            </label>
+        </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row" style="grid-template-columns: 100px 1fr;">
+          <h3>Cerca</h3>
+          <div class="search"><input id="searchBox" type="text" placeholder="Cerca in tabella (squadre, palestra, ecc.)"></div>
+        </div>
+        <div class="count"><span id="rowCount"></span></div>
+      </div>
+    </div>
+    
+    <button id="resetFilters" style="background:#2563eb;color:white;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;margin-bottom:16px;">
+      Mostra tutto
+    </button>
+
+    <div class="table-card">
+      <table id="calTable">
+        <thead>
+          <tr>
+            <th data-col="0">Giorno <span class="sort-ind"></span></th>
+            <th data-col="1">Data <span class="sort-ind"></span></th>
+            <th data-col="2">Ora <span class="sort-ind"></span></th>
+            <th data-col="3">Squadra A <span class="sort-ind"></span></th>
+            <th data-col="4">Squadra B <span class="sort-ind"></span></th>
+            <th data-col="5">Categoria <span class="sort-ind"></span></th>
+            <th data-col="6">Palestra <span class="sort-ind"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+        
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Lun</td>
+            <td>19/10/2026</td>
+            <td>21:00</td>
+            <td class='bold'>VB BEDI BULLS</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>SCUOLE MEDIE I.C. - VIA MONS. A. BONTACCHIO 4, BEDIZZOLE</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mer</td>
+            <td>21/10/2026</td>
+            <td>19:00</td>
+            <td class='bold'>ICO SERVICE V</td>
+            <td class='bold'>SMV U12</td>
+            <td>U12</td>
+            <td>PALESTRA BEDIZZOLE, VIA MONSIGNOR. A. BONTACCHIO, BEDIZZOLE</td>
+        </tr>
+        
+
+        <tr data-categoria="OPEN" data-coaches="Valeria" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>23/10/2026</td>
+            <td>21:00</td>
+            <td class='bold'>USO MOMPIANO</td>
+            <td class='bold'>OPEN</td>
+            <td>OPEN</td>
+            <td>PALESTRA MOMPIANO, VIA NIKOLAJEWKA, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>24/10/2026</td>
+            <td>15:30</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td class='bold'>CASTRINI IMPIANTI VOLLEY BEDIZZOLE</td>
+            <td>U14F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>24/10/2026</td>
+            <td>15:30</td>
+            <td class='bold'>EUROMEDICAL</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td>U15F</td>
+            <td>PALESTRA CORTINE DI NAVE, VIA SAN MARCO 26, CORTINE</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>24/10/2026</td>
+            <td>17:00</td>
+            <td class='bold'>FOMA PRALBOINO JUVOLLEY</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td>U17F</td>
+            <td>PALESTRA COMUNALE, VIA MARCONI, 1, PRALBOINO</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>24/10/2026</td>
+            <td>19:00</td>
+            <td class='bold'>VOLLEY MONTI</td>
+            <td class='bold'>SMV U12</td>
+            <td>U12</td>
+            <td>PALESTRA FALCONE, VIA A.V.I.S., MONTICHIARI</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>25/10/2026</td>
+            <td>15:30</td>
+            <td class='bold'>BORTOLI VBC PREALPINO</td>
+            <td class='bold'>SMV U15</td>
+            <td>U15F</td>
+            <td>PALESTRA PATERLINI, VIA TREDICESIMA, 18, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>25/10/2026</td>
+            <td>16:00</td>
+            <td class='bold'>REAL VOLLEY POL LONATO</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td>U15F</td>
+            <td>PALAPONTE, VIA SAN MARCO, CALCINATO</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>25/10/2026</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>VOLLEY PEDRENGO - CURNO 2010</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mar</td>
+            <td>27/10/2026</td>
+            <td>21:15</td>
+            <td class='bold'>SKILLED VOLLEY MONTICHIARI</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>SCUOLA &quot;L.B. ALBERTI&quot; - VIA PELLEGRINO 30, MONTICHIARI</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Mer</td>
+            <td>28/10/2026</td>
+            <td>19:00</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td class='bold'>VALVOLLEY 15B</td>
+            <td>U15F</td>
+            <td>CASA - SAN ZENO</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>30/10/2026</td>
+            <td>21:00</td>
+            <td class='bold'>CUS I UNDER</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td>1DF</td>
+            <td>PALESTRA ITS LUNARDI - CAMPO CENTRALE, VIA RICCOBELLI, 55, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="OPEN" data-coaches="Valeria" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>30/10/2026</td>
+            <td>21:00</td>
+            <td class='bold'>MAL VALVOLLEY</td>
+            <td class='bold'>OPEN</td>
+            <td>OPEN</td>
+            <td>PALESTRA LUMEZZANE V. MORETTO, VIA MORETTO, LUMEZZANE</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>31/10/2026</td>
+            <td>15:00</td>
+            <td class='bold'>SMV U12</td>
+            <td class='bold'>CALCINATO RED</td>
+            <td>U12</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>31/10/2026</td>
+            <td>16:00</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td class='bold'>+39 VOLLEY U15 VAIACAR TECNOSTAFF</td>
+            <td>U15F</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>31/10/2026</td>
+            <td>19:00</td>
+            <td class='bold'>ACCADEMIA VALLECAMONICA</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td>U14F</td>
+            <td>PALESTRA DI BIENNO, VIA MARCONI, 1, BIENNO</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>31/10/2026</td>
+            <td>21:15</td>
+            <td class='bold'>MAPS POL. CAPRIOLESE</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>PALAZZETTO SPORT, VIA FOSSADELLI 29, CAPRIOLO</td>
+        </tr>
+        
+
+        <tr data-categoria="U13F" data-coaches="Giorgio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>01/11/2026</td>
+            <td>10:30</td>
+            <td class='bold'>VALVOLLEY</td>
+            <td class='bold'>SMV U13</td>
+            <td>U13F</td>
+            <td>PALESTRA SC. ELEMENTARI, VIA MORETTO, 31, LUMEZZANE</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>01/11/2026</td>
+            <td>15:30</td>
+            <td class='bold'>CUS U15 BLU</td>
+            <td class='bold'>SMV U15</td>
+            <td>U15F</td>
+            <td>PALESTRA ITS LUNARDI - CAMPO CENTRALE, VIA RICCOBELLI, 55, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>01/11/2026</td>
+            <td>18:00</td>
+            <td class='bold'>VOLLEY RONCA 17</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td>U17F</td>
+            <td>PALAZZETTO DELLO SPORT, VIA G. DI VITTORIO, 32, RONCADELLE</td>
+        </tr>
+        
+
+        <tr data-categoria="OPEN" data-coaches="Valeria" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mar</td>
+            <td>03/11/2026</td>
+            <td>21:15</td>
+            <td class='bold'>CORTINE</td>
+            <td class='bold'>OPEN</td>
+            <td>OPEN</td>
+            <td>PALESTRA CORTINE DI NAVE, VIA SAN MARCO 26, NAVE</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>05/11/2026</td>
+            <td>21:00</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td class='bold'>3DF PONTE PPZ</td>
+            <td>3DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>06/11/2026</td>
+            <td>20:30</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td class='bold'>1D S.MICHELE TRAVAGLIATO</td>
+            <td>1DF</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>06/11/2026</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>BRUTTI DI BOSCO</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>07/11/2026</td>
+            <td>16:00</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td class='bold'>VOLLEY RONCADELLE 14</td>
+            <td>U14F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>07/11/2026</td>
+            <td>17:30</td>
+            <td class='bold'>PPZ U15</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td>U15F</td>
+            <td>PALESTRA P.TE ZANANO, VIA GIOVANNI PASCOLI, SAREZZO</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>07/11/2026</td>
+            <td>18:30</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td class='bold'>VALVOLLEY AUTOTRASPORTI CRAM</td>
+            <td>U17F</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U13F" data-coaches="Giorgio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>07/11/2026</td>
+            <td>19:00</td>
+            <td class='bold'>SMV U13</td>
+            <td class='bold'>TEZENIS ATLANTIDE BS 13F6X6</td>
+            <td>U13F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>08/11/2026</td>
+            <td>15:30</td>
+            <td class='bold'>SMV U15</td>
+            <td class='bold'>VEGA VOLLEY</td>
+            <td>U15F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>08/11/2026</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>BRACCO PRO PATRIA SERIE_D SU (SU)</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>08/11/2026</td>
+            <td>19:00</td>
+            <td class='bold'>ACCADEMIA VALLECAMONICA</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td>U15F</td>
+            <td>PALESTRA DI BIENNO, VIA MARCONI, 1, BIENNO</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mar</td>
+            <td>10/11/2026</td>
+            <td>21:00</td>
+            <td class='bold'>MENONI METALLI</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td>3DF</td>
+            <td>PALESTRA SCUOLE MEDIE, VIA SCUOLE, 11, MONTIRONE</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mer</td>
+            <td>11/11/2026</td>
+            <td>17:30</td>
+            <td class='bold'>MCDONALD&#x27;S ATLANTIDE BS 15F CALINI</td>
+            <td class='bold'>SMV U15</td>
+            <td>U15F</td>
+            <td>PALESTRA  PIERPAOLO MOLINARI, VIA GOLDONI, 9, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mer</td>
+            <td>11/11/2026</td>
+            <td>21:00</td>
+            <td class='bold'>ASD MAKHAI VOLLEY</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>SCUOLA MEDIA QUASIMODO - VIA COSTALUNGA 15, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="OPEN" data-coaches="Valeria" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>12/11/2026</td>
+            <td>21:15</td>
+            <td class='bold'>GSP POLAVENO</td>
+            <td class='bold'>OPEN</td>
+            <td>OPEN</td>
+            <td>PALESTRA POLAVENO, STRADA PROVINCIALE, POLAVENO</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>13/11/2026</td>
+            <td>21:00</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td class='bold'>SMALTIAMO VBC PREALPINO</td>
+            <td>1DF</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>14/11/2026</td>
+            <td>16:00</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td class='bold'>VOLLEY PISOGNE - U15 - ECC.</td>
+            <td>U15F</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>14/11/2026</td>
+            <td>17:00</td>
+            <td class='bold'>BRESSO</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>SCUOLA ELEMENTARE MANZONI, VIA SIMON DEGATTI, BRESSO</td>
+        </tr>
+        
+
+        <tr data-categoria="U13F" data-coaches="Giorgio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>14/11/2026</td>
+            <td>17:30</td>
+            <td class='bold'>VEGA VOLLEY</td>
+            <td class='bold'>SMV U13</td>
+            <td>U13F</td>
+            <td>PALESTRA COMUNALE, VIA ROMA, PONCARALE</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>15/11/2026</td>
+            <td>11:30</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td class='bold'>SILVERCOM</td>
+            <td>U15F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>15/11/2026</td>
+            <td>11:30</td>
+            <td class='bold'>SIGNORINI AGENZIA - PINK</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td>U14F</td>
+            <td>PALESTRA SCUOLE ELEMENTARI, VIA SAN GIOVANNI, 200, MONTICHIARI</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>15/11/2026</td>
+            <td>18:00</td>
+            <td class='bold'>VOLLEY PISOGNE - U17-ECC.</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td>U17F</td>
+            <td>PALAZZETTO DI GRATACASOLO, VIA DON P. SALVETTI, 6, PISOGNE</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Lun</td>
+            <td>16/11/2026</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>XELLE</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>19/11/2026</td>
+            <td>21:00</td>
+            <td class='bold'>US ROVIZZA-SIRMIONE</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td>1DF</td>
+            <td>PALASPORT, VIA LEONARDO DA VINCI, 24, SIRMIONE</td>
+        </tr>
+        
+
+        <tr data-categoria="OPEN" data-coaches="Valeria" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>19/11/2026</td>
+            <td>21:15</td>
+            <td class='bold'>OPEN</td>
+            <td class='bold'>VOLLEYBALL RS</td>
+            <td>OPEN</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>21/11/2026</td>
+            <td>15:00</td>
+            <td class='bold'>SMV U12</td>
+            <td class='bold'>U12 DESENZANO</td>
+            <td>U12</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>21/11/2026</td>
+            <td>19:00</td>
+            <td class='bold'>VOLLEY PISOGNE - U14 - ECC.</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td>U14F</td>
+            <td>PALAZZETTO DI GRATACASOLO, VIA DON P. SALVETTI, 6, PISOGNE</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>22/11/2026</td>
+            <td>10:30</td>
+            <td class='bold'>VOLLEY TORBOLE MILLENIUM U15</td>
+            <td class='bold'>SMV U15</td>
+            <td>U15F</td>
+            <td>POLIVALENTE SAN POLO, VIA RAFFAELLO, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>22/11/2026</td>
+            <td>19:00</td>
+            <td class='bold'>IMBAL LINE VOLLEY BEDIZZOLE (PG)</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>PALESTRA COMUNALE, VIA D. ALIGHIERI, BEDIZZOLE</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>22/11/2026</td>
+            <td>11:00</td>
+            <td class='bold'>TONOLI NYFIL - PINK</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td>U15F</td>
+            <td>PALESTRA FALCONE, VIA AVIS, MONTICHIARI</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>22/11/2026</td>
+            <td>15:00</td>
+            <td class='bold'>SMV U12</td>
+            <td class='bold'>POZZOLENGO</td>
+            <td>U12</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>22/11/2026</td>
+            <td>18:00</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td class='bold'>VALVOLLEY 15R</td>
+            <td>U15F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mer</td>
+            <td>25/11/2026</td>
+            <td>21:20</td>
+            <td class='bold'>SHARKS VOLLEY</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>PALESTRA COMUNALE - VIA FOLLEREAU, GARDONE RIVIERA</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>26/11/2026</td>
+            <td>21:00</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td class='bold'>US FIONDA BAGNOLO</td>
+            <td>3DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>27/11/2026</td>
+            <td>20:30</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td class='bold'>NEW VOLLEY BOTTICINO</td>
+            <td>1DF</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="OPEN" data-coaches="Valeria" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>27/11/2026</td>
+            <td>21:00</td>
+            <td class='bold'>SANGIA</td>
+            <td class='bold'>OPEN</td>
+            <td>OPEN</td>
+            <td>PALESTRA GOLGI (BS), VIA RODI, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>28/11/2026</td>
+            <td>15:30</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td class='bold'>CHIARI GSP</td>
+            <td>U14F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>28/11/2026</td>
+            <td>16:00</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td class='bold'>PALLAVOLO TORBOLE MILLENNIUM U15</td>
+            <td>U15F</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>28/11/2026</td>
+            <td>18:30</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td class='bold'>BIOS ASFALTI VB</td>
+            <td>U17F</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>29/11/2026</td>
+            <td>10:30</td>
+            <td class='bold'>12CASTENEDOLO</td>
+            <td class='bold'>SMV U12</td>
+            <td>U12</td>
+            <td>PALESTRA CASTENEDOLO CENTRO, VIALE DELLA RIMEMBRANZA, CASTENEDOLO</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>29/11/2026</td>
+            <td>11:30</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td class='bold'>OSPI BLUE</td>
+            <td>U15F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>29/11/2026</td>
+            <td>15:30</td>
+            <td class='bold'>SMV U15</td>
+            <td class='bold'>BORTOLI VBC PREALPINO</td>
+            <td>U15F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>29/11/2026</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>BONETTI US PIANENGHESE DF</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mar</td>
+            <td>01/12/2026</td>
+            <td>18:30</td>
+            <td class='bold'>OSPI BLUE</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td>U15F</td>
+            <td>PALESTRA OSPITALETTO, VIA X GIORNATE, OSPITALETTO</td>
+        </tr>
+        
+
+        <tr data-categoria="OPEN" data-coaches="Valeria" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>03/12/2026</td>
+            <td>21:15</td>
+            <td class='bold'>OPEN</td>
+            <td class='bold'>RDM</td>
+            <td>OPEN</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>03/12/2026</td>
+            <td>21:15</td>
+            <td class='bold'>3D OSPI OLEOMEC</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td>3DF</td>
+            <td>PALAZZETTO DELLO SPORT GIOVANNI BORGHETTI, VIA X GIORNATE, OSPITALETTO BRESCIANO</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>04/12/2026</td>
+            <td>21:00</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td class='bold'>AFA DE GIORGI VILLANUOVA</td>
+            <td>1DF</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>04/12/2026</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>EVO VOLLEY</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>05/12/2026</td>
+            <td>16:00</td>
+            <td class='bold'>SMV U15</td>
+            <td class='bold'>CUS U15 BLU</td>
+            <td>U15F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>05/12/2026</td>
+            <td>17:00</td>
+            <td class='bold'>VALVOLLEY FREDDI</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td>U15F</td>
+            <td>PALESTRA COMUNALE, VIA LAZIO, LUMEZZANE</td>
+        </tr>
+        
+
+        <tr data-categoria="U13F" data-coaches="Giorgio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>05/12/2026</td>
+            <td>18:30</td>
+            <td class='bold'>SMV U13</td>
+            <td class='bold'>CUS U13 BLU</td>
+            <td>U13F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>05/12/2026</td>
+            <td>20:30</td>
+            <td class='bold'>ART COSMETICS VOLLEY CARAVAGGIO</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>PALESTRA COMUNALE, VIA DELLA PALESTRA 1, FORNOVO SAN GIOVANNI</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>06/12/2026</td>
+            <td>11:00</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td class='bold'>EFFEPI SOFT -PINK</td>
+            <td>U17F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>06/12/2026</td>
+            <td>15:00</td>
+            <td class='bold'>SMV U12</td>
+            <td class='bold'>VEGA VOLLEY</td>
+            <td>U12</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>06/12/2026</td>
+            <td>18:30</td>
+            <td class='bold'>VOLLEY TORBOLE MILLENIUM U14</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td>U14F</td>
+            <td>NUOVO PADIGLIONE POLIVALENTE, VIA CAMILLO GOLGI, TORBOLE CASAGLIA</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mer</td>
+            <td>09/12/2026</td>
+            <td>21:30</td>
+            <td class='bold'>BSV PIRLI MISTI</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>CENTRO SPORTIVO VITO MERO - VIA TITO BARESANI 20, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>10/12/2026</td>
+            <td>21:00</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td class='bold'>ASPO PONTOGLIO 3DIVISIONE FEMMINILE</td>
+            <td>3DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="OPEN" data-coaches="Valeria" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>10/12/2026</td>
+            <td>21:00</td>
+            <td class='bold'>ORAT PAOLO VI</td>
+            <td class='bold'>OPEN</td>
+            <td>OPEN</td>
+            <td>PALESTRA SC. MEDIE S. ANDREA, VIA CAMERATE, 5, CONCESIO</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>11/12/2026</td>
+            <td>21:00</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td class='bold'>RDM</td>
+            <td>1DF</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>12/12/2026</td>
+            <td>15:30</td>
+            <td class='bold'>CASTRINI IMPIANTI VOLLEY BEDIZZOLE</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td>U14F</td>
+            <td>PALESTRA SCUOLE MEDIE CALINI, VIA BONTACCHIO, 4, BEDIZZOLE</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>12/12/2026</td>
+            <td>16:00</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td class='bold'>REAL VOLLEY POL LONATO</td>
+            <td>U15F</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U13F" data-coaches="Giorgio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>12/12/2026</td>
+            <td>18:30</td>
+            <td class='bold'>SMV U13</td>
+            <td class='bold'>VALVOLLEY</td>
+            <td>U13F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>13/12/2026</td>
+            <td>11:00</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td class='bold'>FOMA PRALBOINO JUVOLLEY</td>
+            <td>U17F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>13/12/2026</td>
+            <td>15:30</td>
+            <td class='bold'>CARPENEDOLO</td>
+            <td class='bold'>SMV U12</td>
+            <td>U12</td>
+            <td>PALAZZETTO CARPENEDOLO, VIA DEODATO LAFFRANCHI, CARPENEDOLO</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>13/12/2026</td>
+            <td>17:15</td>
+            <td class='bold'>VEGA VOLLEY</td>
+            <td class='bold'>SMV U15</td>
+            <td>U15F</td>
+            <td>PALESTRA COMUNALE, VIA ROMA, PONCARALE</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>13/12/2026</td>
+            <td>18:00</td>
+            <td class='bold'>VALVOLLEY 15R</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td>U15F</td>
+            <td>PALESTRA SCUOLE VILLA CARCINA, VIA LAZIO 8</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>13/12/2026</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>NEW VOLLEY REZZATO - DVM</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Lun</td>
+            <td>14/12/2026</td>
+            <td>21:00</td>
+            <td class='bold'>SIVOLLEYBYBOVEZZO</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td>3DF</td>
+            <td>PALESTRA SC. MEDIE &#x27;VIVALDI&#x27;, VIA PAOLO VI, 9, BOVEZZO</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mer</td>
+            <td>16/12/2026</td>
+            <td>21:30</td>
+            <td class='bold'>CLB BENTIVOGLIO MACCHINE UTENSILI</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>SCUOLA MEDIA - VIA GARIBALDI 30, TORBOLE CASAGLIA</td>
+        </tr>
+        
+
+        <tr data-categoria="OPEN" data-coaches="Valeria" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>17/12/2026</td>
+            <td>20:30</td>
+            <td class='bold'>EDUCATT</td>
+            <td class='bold'>OPEN</td>
+            <td>OPEN</td>
+            <td>CAMPUS UNIVERSITA&#x27; CA, VIA DELLA GARZETTA, 48, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>18/12/2026</td>
+            <td>21:15</td>
+            <td class='bold'>EFFEPI SOFT</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td>1DF</td>
+            <td>PALESTRA FALCONE, VIA AVIS, MONTICHIARI</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>19/12/2026</td>
+            <td>15:30</td>
+            <td class='bold'>&#x27;+39 U12 CALVI</td>
+            <td class='bold'>SMV U12</td>
+            <td>U12</td>
+            <td>PALESTRA CALVISANO, VIA SAN MICHELE, CALVISANO</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>19/12/2026</td>
+            <td>16:00</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td class='bold'>ACCADEMIA VALLECAMONICA</td>
+            <td>U14F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>19/12/2026</td>
+            <td>19:00</td>
+            <td class='bold'>+39 VOLLEY U15 VAIACAR TECNOSTAFF</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td>U15F</td>
+            <td>PALESTRA COMUNALE, VIA ISORELLA 2, ISORELLA</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>19/12/2026</td>
+            <td>21:00</td>
+            <td class='bold'>ARCI-COOP ZENIT</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>PALESTRA COMUNALE, VIA VERGA, VAIANO CREMASCO</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>20/12/2026</td>
+            <td>15:00</td>
+            <td class='bold'>SMV U15</td>
+            <td class='bold'>MCDONALD&#x27;S ATLANTIDE BS 15F CALINI</td>
+            <td>U15F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U13F" data-coaches="Giorgio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>20/12/2026</td>
+            <td>15:30</td>
+            <td class='bold'>TEZENIS ATLANTIDE BS 13F6X6</td>
+            <td class='bold'>SMV U13</td>
+            <td>U13F</td>
+            <td>PALESTRA  PIERPAOLO MOLINARI, VIA GOLDONI, 9, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>20/12/2026</td>
+            <td>18:00</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td class='bold'>VOLLEY RONCA 17</td>
+            <td>U17F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mar</td>
+            <td>22/12/2026</td>
+            <td>21:00</td>
+            <td class='bold'>DRAGON VOLLEY ASD</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>SCUOLA MEDIA CARDUCCI (ING. RETRO) - VIALE DEL PIAVE 50, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>09/01/2027</td>
+            <td>15:00</td>
+            <td class='bold'>SMV U12</td>
+            <td class='bold'>U12 MOLINETTO</td>
+            <td>U12</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>10/01/2027</td>
+            <td>11:00</td>
+            <td class='bold'>U17 ECC. LONREALPES</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td>U17F</td>
+            <td>CAMPO A POLIFUNZIONALE, VIA MARCHESINO, 4/A, LONATO</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>10/01/2027</td>
+            <td>11:30</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td class='bold'>EUROMEDICAL</td>
+            <td>U15F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>10/01/2027</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>PALLAVOLO ZANICA (SU)</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Lun</td>
+            <td>11/01/2027</td>
+            <td>21:00</td>
+            <td class='bold'>3DF PONTE PPZ</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td>3DF</td>
+            <td>PALESTRA SCUOLA ELEMENTARE, VIA PASCOLI, SAREZZO</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>15/01/2027</td>
+            <td>19:30</td>
+            <td class='bold'>VALVOLLEY 15B</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td>U15F</td>
+            <td>PALESTRA LUMEZZANE, VIA MORETTO, LUMEZZANE</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>15/01/2027</td>
+            <td>20:30</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td class='bold'>BRESCIA COPERTURE MANERBIO</td>
+            <td>1DF</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>15/01/2027</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>DG COSTRUZIONI - NSF BRESCIA</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>16/01/2027</td>
+            <td>16:00</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td class='bold'>ACCADEMIA VALLECAMONICA</td>
+            <td>U15F</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U13F" data-coaches="Giorgio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>16/01/2027</td>
+            <td>18:30</td>
+            <td class='bold'>SMV U13</td>
+            <td class='bold'>VEGA VOLLEY</td>
+            <td>U13F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>16/01/2027</td>
+            <td>21:00</td>
+            <td class='bold'>DUEC - NUOVA IMMAGINE FOTO</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>PALESTRA COMUNALE, VIA MANZONI, CREDERA RUBBIANO</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>17/01/2027</td>
+            <td>11:00</td>
+            <td class='bold'>VALVOLLEY AUTOTRASPORTI CRAM</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td>U17F</td>
+            <td>PALA CARLO BERETTA, VIA SAN GIOVANNI BOSCO, 1, GARDONE VAL TROMPIA</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>17/01/2027</td>
+            <td>15:00</td>
+            <td class='bold'>SMV U12</td>
+            <td class='bold'>CALCINATO BLU</td>
+            <td>U12</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>17/01/2027</td>
+            <td>15:00</td>
+            <td class='bold'>VOLLEY RONCADELLE 14</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td>U14F</td>
+            <td>PALESTRA SCOLASTICA GIANNI BRERA, VIA TAZIO NUVOLARI, CASTEL MELLA</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>21/01/2027</td>
+            <td>21:00</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td class='bold'>MENONI METALLI</td>
+            <td>3DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="OPEN" data-coaches="Valeria" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>21/01/2027</td>
+            <td>21:15</td>
+            <td class='bold'>OPEN</td>
+            <td class='bold'>POL MARCHENO</td>
+            <td>OPEN</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>22/01/2027</td>
+            <td>21:00</td>
+            <td class='bold'>1DIV LONREALPES</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td>1DF</td>
+            <td>NUOVA PALESTRA POLIFUNZIONALE - CAMPO CENTRALE, VIA MARCHESINO, 4/A, LONATO</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>22/01/2027</td>
+            <td>21:15</td>
+            <td class='bold'>GLI SCHEMISTI</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>23/01/2027</td>
+            <td>16:00</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td class='bold'>SIGNORINI AGENZIA - PINK</td>
+            <td>U14F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>23/01/2027</td>
+            <td>18:30</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td class='bold'>VOLLEY PISOGNE - U17-ECC.</td>
+            <td>U17F</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>24/01/2027</td>
+            <td>11:30</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td class='bold'>PPZ U15</td>
+            <td>U15F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>24/01/2027</td>
+            <td>17:30</td>
+            <td class='bold'>VOLLEY PISOGNE - U15 - ECC.</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td>U15F</td>
+            <td>PALAZZETTO DI GRATACASOLO, VIA DON P. SALVETTI, 6, PISOGNE</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>24/01/2027</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>BOSIO COMMERCIALE - YOUNION VOLLEY</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mer</td>
+            <td>27/01/2027</td>
+            <td>20:45</td>
+            <td class='bold'>BRUTTI DI BOSCO</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>SCUOLA MEDIA ITALO CALVINO - VIA PARENZO 105, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="OPEN" data-coaches="Valeria" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>28/01/2027</td>
+            <td>21:15</td>
+            <td class='bold'>OPEN</td>
+            <td class='bold'>POLI PEZ</td>
+            <td>OPEN</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>29/01/2027</td>
+            <td>20:30</td>
+            <td class='bold'>VOLLEY ACADEMY D73</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td>1DF</td>
+            <td>PALESTRA COMUNALE, PIAZZA MARCONI, 23, SAN ZENO NAVIGLIO</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>30/01/2027</td>
+            <td>15:30</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td class='bold'>VOLLEY PISOGNE - U14 - ECC.</td>
+            <td>U14F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Luca" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>30/01/2027</td>
+            <td>15:30</td>
+            <td class='bold'>SILVERCOM</td>
+            <td class='bold'>SMV U15_CSI</td>
+            <td>U15F</td>
+            <td>PALESTRA RODENGO SAIANO, VIA SAN FRANCESCO D&#x27;ASSISI, RODENGO SAIANO</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>30/01/2027</td>
+            <td>16:00</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td class='bold'>TONOLI NYFIL - PINK</td>
+            <td>U15F</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>30/01/2027</td>
+            <td>18:30</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td class='bold'>U17 ECC. LONREALPES</td>
+            <td>U17F</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>30/01/2027</td>
+            <td>18:30</td>
+            <td class='bold'>SMV U12</td>
+            <td class='bold'>CALVAVIGHENZI</td>
+            <td>U12</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U13F" data-coaches="Giorgio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>31/01/2027</td>
+            <td>15:30</td>
+            <td class='bold'>CUS U13 BLU</td>
+            <td class='bold'>SMV U13</td>
+            <td>U13F</td>
+            <td>PALESTRA ITS LUNARDI - CAMPO CENTRALE, VIA RICCOBELLI, 55, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Lun</td>
+            <td>01/02/2027</td>
+            <td>20:30</td>
+            <td class='bold'>US FIONDA BAGNOLO</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td>3DF</td>
+            <td>PALESTRA ORATORIO, VIA PITTORE RENICA, BAGNOLO MELLA</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>04/02/2027</td>
+            <td>21:15</td>
+            <td class='bold'>EVO VOLLEY</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>SCUOLA MEDIA ITALO CALVINO - VIA PARENZO 105, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>05/02/2027</td>
+            <td>20:30</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td class='bold'>VOLLEY SABBIO</td>
+            <td>1DF</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="U15F" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>06/02/2027</td>
+            <td>16:30</td>
+            <td class='bold'>PALLAVOLO TORBOLE MILLENNIUM U15</td>
+            <td class='bold'>NVG_SMV U15</td>
+            <td>U15F</td>
+            <td>NUOVO PADIGLIONE POLIVALENTE, VIA CAMILLO GOLGI, TORBOLE CASAGLIA</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>07/02/2027</td>
+            <td>16:00</td>
+            <td class='bold'>CHIARI GSP</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td>U14F</td>
+            <td>PALASPORT, VIA SS TRINITÀ, CHIARI</td>
+        </tr>
+        
+
+        <tr data-categoria="U17F" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>07/02/2027</td>
+            <td>19:00</td>
+            <td class='bold'>BIOS ASFALTI VB</td>
+            <td class='bold'>NVG_SMV U17</td>
+            <td>U17F</td>
+            <td>PALESTRA COMUNALE, VIA DANTE ALIGHIERI, BEDIZZOLE</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>11/02/2027</td>
+            <td>21:00</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td class='bold'>3D OSPI OLEOMEC</td>
+            <td>3DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>12/02/2027</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>ASD MAKHAI VOLLEY</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U14F" data-coaches="Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>13/02/2027</td>
+            <td>16:00</td>
+            <td class='bold'>SMV U14_ECC</td>
+            <td class='bold'>VOLLEY TORBOLE MILLENIUM U14</td>
+            <td>U14F</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>14/02/2027</td>
+            <td>15:30</td>
+            <td class='bold'>OSPI WHITE</td>
+            <td class='bold'>SMV U12</td>
+            <td>U12</td>
+            <td>PALESTRA OSPITALETTO, VIA X GIORNATE, OSPITALETTO</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>14/02/2027</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>SBM BGREEN LOCATE BERGAMASCO</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Lun</td>
+            <td>15/02/2027</td>
+            <td>21:00</td>
+            <td class='bold'>ASPO PONTOGLIO 3DIVISIONE FEMMINILE</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td>3DF</td>
+            <td>PALAZZETTO SPORTIVO, VIA PIAVE, 17, PONTOGLIO</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>19/02/2027</td>
+            <td>20:30</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td class='bold'>CUS I UNDER</td>
+            <td>1DF</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>19/02/2027</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>CLB BENTIVOGLIO MACCHINE UTENSILI</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>20/02/2027</td>
+            <td>20:30</td>
+            <td class='bold'>VOLLEY PEDRENGO - CURNO 2010</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>PALESTRA COMUNALE, VIA GIARDINI 10, PEDRENGO</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>21/02/2027</td>
+            <td>15:00</td>
+            <td class='bold'>SMV U12</td>
+            <td class='bold'>GARDA DREAM</td>
+            <td>U12</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="3DF" data-coaches="Fabrizio e Giorgio" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Gio</td>
+            <td>25/02/2027</td>
+            <td>21:00</td>
+            <td class='bold'>SMV 3DIV</td>
+            <td class='bold'>SIVOLLEYBYBOVEZZO</td>
+            <td>3DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>26/02/2027</td>
+            <td>21:00</td>
+            <td class='bold'>1D S.MICHELE TRAVAGLIATO</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td>1DF</td>
+            <td>PALAZZETTO DELLO SPORT, VIA IV NOVEMBRE, TRAVAGLIATO</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>26/02/2027</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>VB BEDI BULLS</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="U12" data-coaches="Filippo" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>27/02/2027</td>
+            <td>16:00</td>
+            <td class='bold'>FAINI VOBBAR</td>
+            <td class='bold'>SMV U12</td>
+            <td>U12</td>
+            <td>PALESTRA BARGHE, PIAZZA AVISINA, BARGHE</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>28/02/2027</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>MAPS POL. CAPRIOLESE</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>05/03/2027</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>BSV PIRLI MISTI</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>05/03/2027</td>
+            <td>21:15</td>
+            <td class='bold'>SMALTIAMO VBC PREALPINO</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td>1DF</td>
+            <td>PALESTRA PATERLINI, VIA TREDICESIMA, 18, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>06/03/2027</td>
+            <td>17:00</td>
+            <td class='bold'>BRACCO PRO PATRIA SERIE_D SU (SU)</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>PALESTRA ISTITUTO NATTA, VIA DON CALABRIA 16, MILANO</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Mar</td>
+            <td>09/03/2027</td>
+            <td>21:25</td>
+            <td class='bold'>XELLE</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>POLIVALENTE RAFFAELLO - VIA RAFFAELLO SANZIO 208, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>12/03/2027</td>
+            <td>20:30</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td class='bold'>US ROVIZZA-SIRMIONE</td>
+            <td>1DF</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>14/03/2027</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>BRESSO</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>19/03/2027</td>
+            <td>21:00</td>
+            <td class='bold'>NEW VOLLEY BOTTICINO</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td>1DF</td>
+            <td>PALESTRA SCUOLE MEDIE, VIA LONGHETTA, 39, BOTTICINO SERA</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>19/03/2027</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>DRAGON VOLLEY ASD</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>21/03/2027</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>IMBAL LINE VOLLEY BEDIZZOLE (PG)</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Lun</td>
+            <td>22/03/2027</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>ASD SAMBER 84</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>02/04/2027</td>
+            <td>21:00</td>
+            <td class='bold'>AFA DE GIORGI VILLANUOVA</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td>1DF</td>
+            <td>PALAZZETTO DELLO SPORT COMUNALE, VIA S. PELLICO, 39, VILLANUOVA SUL CLISI</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>02/04/2027</td>
+            <td>21:15</td>
+            <td class='bold'>DG COSTRUZIONI - NSF BRESCIA</td>
+            <td class='bold'>MISTO</td>
+            <td>MISTO</td>
+            <td>SCUOLA MEDIA PIRANDELLO - VIA DEL BROLO 89, BRESCIA</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>03/04/2027</td>
+            <td>20:30</td>
+            <td class='bold'>BONETTI US PIANENGHESE DF</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>PALESTRA COMUNALE, VIA CONVENTO, PIANENGO</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>09/04/2027</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>SKILLED VOLLEY MONTICHIARI</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>09/04/2027</td>
+            <td>21:15</td>
+            <td class='bold'>RDM</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td>1DF</td>
+            <td>PALESTRA COMUNALE ADELE BONIOTTI, VIA EUROPA, 10, POLAVENO</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>11/04/2027</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>ART COSMETICS VOLLEY CARAVAGGIO</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>16/04/2027</td>
+            <td>20:30</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td class='bold'>EFFEPI SOFT</td>
+            <td>1DF</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>16/04/2027</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>SHARKS VOLLEY</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>17/04/2027</td>
+            <td>21:15</td>
+            <td class='bold'>NEW VOLLEY REZZATO - DVM</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>PALASPORT, VIA GIOVANNI XXIII, REZZATO</td>
+        </tr>
+        
+
+        <tr data-categoria="MISTO" data-coaches="Feffo" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>23/04/2027</td>
+            <td>21:15</td>
+            <td class='bold'>MISTO</td>
+            <td class='bold'>GLI SCHEMISTI</td>
+            <td>MISTO</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Trasferta" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>23/04/2027</td>
+            <td>21:15</td>
+            <td class='bold'>BRESCIA COPERTURE MANERBIO</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td>1DF</td>
+            <td>PALESTRA SC.MEDIE (VECCHIA), VIA CREMONA, MANERBIO</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>25/04/2027</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>ARCI-COOP ZENIT</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="1DF" data-coaches="Vera" data-tipo="Casa" data-giornogruppo="Infrasettimanale">
+            <td>Ven</td>
+            <td>30/04/2027</td>
+            <td>20:30</td>
+            <td class='bold'>NVG_SMV 1DIV</td>
+            <td class='bold'>1DIV LONREALPES</td>
+            <td>1DF</td>
+            <td>CASA - GAVARDO</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>01/05/2027</td>
+            <td>20:00</td>
+            <td class='bold'>PALLAVOLO ZANICA (SU)</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>PALESTRA SCUOLE ELEMENTARE F.MORETTI, VIA PADERGNONE 17, ZANICA</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Casa" data-giornogruppo="Weekend">
+            <td>Dom</td>
+            <td>09/05/2027</td>
+            <td>19:00</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td class='bold'>DUEC - NUOVA IMMAGINE FOTO</td>
+            <td>DF</td>
+            <td>CASA - SMV</td>
+        </tr>
+        
+
+        <tr data-categoria="DF" data-coaches="Vera e Fabrizio" data-tipo="Trasferta" data-giornogruppo="Weekend">
+            <td>Sab</td>
+            <td>15/05/2027</td>
+            <td>20:00</td>
+            <td class='bold'>BOSIO COMMERCIALE - YOUNION VOLLEY</td>
+            <td class='bold'>NVG_SMV D</td>
+            <td>DF</td>
+            <td>PALAZZETTO CITTÀ DI CLUSONE, VIA DON BEPO VAVASSORI, CLUSONE</td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+(function() {
+  const table = document.getElementById('calTable');
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const countEl = document.getElementById('rowCount');
+  const searchBox = document.getElementById('searchBox');
+
+  function getCheckedValues(cls) {
+    return Array.from(document.querySelectorAll('input.flt-' + cls + ':checked')).map(el => el.value);
+  }
+
+  function textMatch(row, q) {
+    if (!q) return true;
+    const txt = row.innerText.toLowerCase();
+    return txt.includes(q.toLowerCase());
+  }
+
+  function applyFilters() {
+    const cat = getCheckedValues('categoria');
+    const coach = getCheckedValues('coaches');
+    const tipo = getCheckedValues('tipo');
+    const ggrp = getCheckedValues('giorno');
+    const q = searchBox.value.trim();
+
+    let visible = 0;
+    rows.forEach(tr => {
+      const rc = tr.dataset.categoria || '';
+      const rco = tr.dataset.coaches || '';
+      const rt = tr.dataset.tipo || '';
+      const rg = tr.dataset.giornogruppo || '';
+
+      const ok = (cat.length === 0 || cat.includes(rc)) && (coach.length === 0 || coach.includes(rco)) && tipo.includes(rt) && ggrp.includes(rg) && textMatch(tr, q);
+      tr.style.display = ok ? '' : 'none';
+      if (ok) visible += 1;
+    });
+    countEl.textContent = visible + ' partite mostrate';
+  }
+
+  applyFilters();
+
+  document.querySelectorAll('input[type=checkbox]').forEach(cb => cb.addEventListener('change', applyFilters));
+  searchBox.addEventListener('input', applyFilters);
+  
+  // --- Pulsante "Azzera filtri" ---
+  const resetBtn = document.getElementById('resetFilters');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      // Seleziona tutti i checkbox
+      document.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = true);
+      // Svuota la ricerca
+      searchBox.value = '';
+      // Aggiorna la tabella
+      applyFilters();
+    });
+  }
+
+  let sortState = {col: 1, dir: 1};
+  function parseDate(d) {
+    const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(d.trim());
+    if (!m) return null;
+    return new Date(parseInt(m[3],10), parseInt(m[2],10)-1, parseInt(m[1],10)).getTime();
+  }
+  function parseTime(t) {
+    const m = /^(\d{1,2}):(\d{2})$/.exec(t.trim());
+    if (!m) return null;
+    const h = parseInt(m[1],10); const mi = parseInt(m[2],10);
+    return h*60 + mi;
+  }
+  function getCellText(tr, colIdx) {
+    const td = tr.children[colIdx];
+    return td ? td.textContent : '';
+  }
+  function compare(a, b, col) {
+    const A = getCellText(a, col).trim();
+    const B = getCellText(b, col).trim();
+    if (col === 1) {
+      const da = parseDate(A), db = parseDate(B);
+      if (da !== null && db !== null) return da - db;
+    }
+    if (col === 2) {
+      const ta = parseTime(A), tb = parseTime(B);
+      if (ta !== null && tb !== null) return ta - tb;
+    }
+    return A.localeCompare(B, 'it', {numeric: true, sensitivity: 'base'});
+  }
+  function renderSortIndicators() {
+    document.querySelectorAll('thead th .sort-ind').forEach(el => el.textContent = '');
+    const th = document.querySelector('thead th[data-col="' + sortState.col + '"] .sort-ind');
+    if (th) th.textContent = sortState.dir > 0 ? '▲' : '▼';
+  }
+  function sortBy(col) {
+    sortState.col = col;
+    sortState.dir = -sortState.dir;
+    const sorted = rows.slice().sort((a,b) => sortState.dir * compare(a,b,col));
+    sorted.forEach(tr => tbody.appendChild(tr));
+    renderSortIndicators();
+  }
+  document.querySelectorAll('thead th').forEach(th => {
+    th.addEventListener('click', () => sortBy(parseInt(th.dataset.col,10)));
+  });
+  sortBy(2);
+  sortBy(1);
+})();
+</script>
+</body>
+</html>
